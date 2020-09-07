@@ -1,26 +1,45 @@
+/* eslint-disable import/first */
+
+// Imports 
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Switch, Route } from "react-router-dom";
+
+// Pages
+import Home from './pages/Home'
+import Squad from './pages/Squad'
+
+// Components
+import HeaderApp from './components/HeaderApp'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      
+      <HeaderApp />
+
+      {/* Routes */}
+      <Switch>
+
+        <Route path="/squad/:id">
+          <Squad />
+        </Route>
+
+        <Route path="/squad">
+          <Squad />
+        </Route>
+
+        <Route path="/">
+          <Home />
+        </Route>
+
+      </Switch>
+
+      <footer>
+        2020 - All rights reserved
+      </footer>
     </div>
-  );
+  )
+  
 }
 
 export default App;
