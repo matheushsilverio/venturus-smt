@@ -18,21 +18,24 @@ function App() {
       <HeaderApp />
 
       {/* Routes */}
-      <Switch>
+      <div class="container is-fluid">
+        <Switch>
 
-        <Route path="/squad/:id">
-          <Squad />
-        </Route>
+          <Route path="/squad/:id">
+            <Squad />
+          </Route>
 
-        <Route path="/squad">
-          <Squad />
-        </Route>
+          <Route path="/squad">
+            <Squad />
+          </Route>
 
-        <Route path="/">
-          <Home />
-        </Route>
+          <Route path="/">
+            <Home />
+          </Route>
 
-      </Switch>
+        </Switch>
+      </div>
+        
 
       <footer>
         2020 - All rights reserved
