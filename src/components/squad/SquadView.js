@@ -1,27 +1,23 @@
 import React from 'react';
-import { makeStyles, Button, Icon } from '@material-ui/core';
+import { makeStyles, Button, Icon, Menu, MenuItem } from '@material-ui/core';
 import { _abrevName } from '../../helpers/scripts'
 
 export default props => {
-  const { handler, formation, squad } = props
+  const { handler, formation, squad, playerBase } = props
   const classes = useStyles();
-
-  const [values, setValues] = React.useState({
-    base: []
-  })
 
   let prefix = 'f' + formation.replace('-', '')
 
   return (
     <div style={{ width: '100%' }}>
-      <div className={classes.view}>
+      <div class="view">
         <div class="comparative-line-2"></div>
         <div class="comparative-circle-2"></div>
         <div class="comparative-circle-mini-2"></div>
 
         {
           squad.map((e, i) => (
-            <PositionSelect classes={classes} prefix={prefix} index={i} data={e}></PositionSelect>
+            <PositionSelect handler={handler} playerBase={playerBase} classes={classes} prefix={prefix} index={i} data={e}></PositionSelect>
           ))
         }
       </div>
@@ -31,7 +27,18 @@ export default props => {
 }
 
 function PositionSelect (props) {
-  const { data, classes, prefix, index } = props
+  const { data, prefix, index, playerBase, handler } = props
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (player, index) => {
+    handler(player, index)
+    setAnchorEl(null);
+  };
 
   let content = <Icon style={{ color: 'white', fontSize: '20px' }}>add</Icon>
   if (data !== null) {
@@ -42,22 +49,29 @@ function PositionSelect (props) {
 
   return (
     <div class={`${_class} pos-base`}> 
-      <div className={classes.selector}>
+      <div onClick={handleClick} class={`selector ${data !== null ? 'selector-full' : ''}`}>
         {content}
       </div>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        {/* <MenuItem onClick={() => handleClose('', index)}>Profile</MenuItem> */}
+        {
+          playerBase.map(player => (
+            <MenuItem onClick={() => handleClose(player, index)}>{ player.name }</MenuItem>
+          ))
+          
+        }
+      </Menu>
     </div>
   )
 }
 
 const useStyles = makeStyles({
-  view: {
-    marginTop: '1em',
-    position: 'relative',
-    width: '100%',
-    height: '850px',
-    borderRadius: '4px',
-    background: 'linear-gradient(180deg, rgba(186,61,123,1) 10%, rgba(130,51,129,1) 100%)'
-  },
   save: {
     backgroundColor: 'rgba(130,51,129,1)',
     width: '100%',
@@ -69,30 +83,5 @@ const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: 'rgba(186,61,123,1)'
     }
-  },
-  selector: {
-    borderRadius: '50%',
-    width: '90px',
-    height: '90px',
-    position: 'absolute',
-    backgroundColor: '#d49cbe',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    // top: '10%',
-    // left: '10%',
-    border: '1px solid #77245a',
-    '&:before': {
-      content: `''`,
-      position: 'absolute',
-      width: '105px',
-      height: '105px',
-      borderRadius: '50%',
-      backgroundColor: 'transparent',
-      backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%23B289CAFF' stroke-width='2' stroke-dasharray='8' stroke-dashoffset='28' stroke-linecap='butt'/%3e%3c/svg%3e")`,
-    }
-  },
-  
+  }
 })

@@ -23,24 +23,38 @@ export default props => {
     squad: [null,null,null,null,null,null,null,null,null,null,null],
     formation: '3-4-3',
     playerBase: [
-      { name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cf' },
-      { name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'mc' },
-      { name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cb' }
+      { id: 0, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cf' },
+      { id: 1, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'mc' },
+      { id: 2, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cb' }
     ],
-    players: []
+    players: [
+      { id: 0, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cf' },
+      { id: 1, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'mc' },
+      { id: 2, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cb' }
+    ]
   });
 
-  const _formations = ['3-2-2-3','3-2-3-1','3-4-3','3-5-2','4-2-3-1','4-3-1-1','4-3-2','4-4-2','4-5-1','5-4-1']
+  const _formations = ['3-2-2-3','3-2-3-2','3-4-3','3-5-2','4-2-3-1','4-3-1-2','4-3-3','4-4-2','4-5-1','5-4-1']
 
   const handleChange = (prop) => (event) => {
     if (prop === 'tags') {
       setValues({ ...values, [prop]: event });
     }
+    if (prop === 'formation') {
+      setValues({ ...values, [prop]: event.target.value });
+      setValues({ ...values, ['squad']: [null,null,null,null,null,null,null,null,null,null,null] });
+    }
     else {
       setValues({ ...values, [prop]: event.target.value });
     }
   };
-
+  const handlerValuesChanges = (value, index) => {
+    setValues({ ...values, ['players']: values.playerBase.filter(e => e.id != value.id ) });
+    
+    let aux = [...values.squad]
+    aux[index] = value
+    setValues({ ...values, ['squad']: aux });
+  }
   const removeTag = (event) => {
     setValues({ ...values, ['tags']: values.tags.filter(e => e !== event) });
   }
@@ -146,7 +160,7 @@ export default props => {
               </div>
 
               {/* campo */}
-              <SquadView handler={handleChange} formation={values.formation} squad={values.squad}></SquadView>
+              <SquadView handler={handlerValuesChanges} playerBase={values.players} formation={values.formation} squad={values.squad}></SquadView>
             </div>
             <div class="column">
               <div>
@@ -164,7 +178,7 @@ export default props => {
               <div>
                 <FormControl fullWidth className={_classes.margin} style={{ borderBottom: '2px solid #EAEAEA' }}>
                   {
-                    values.playerBase.map(e => (
+                    values.players.map(e => (
                       <RowPLayer classes={_classes} player={e}></RowPLayer>
                     ))
                   }
