@@ -1,0 +1,121 @@
+import React from 'react';
+import { createGlobalState } from 'react-hooks-global-state';
+
+const states = {
+  teams: [
+    { 
+      name: 'Barcelona', 
+      description: 'Spanish Team', 
+      website: 'www.barcelona.com', 
+      type: 'real', 
+      tags: ['spanish', 'global'],
+      formation: '4-3-3',
+      squad: [
+        { id: 27, name: 'Volpi', age: '29', nacionality: 'Brazil', },
+        { id: 22, name: 'Víctor Cuesta', age: '31', nacionality: 'Argentina', },
+        { id: 23, name: 'Pedro Geromel', age: '34', nacionality: 'Brazil', },
+        { id: 9, name: 'Daniel Alves', age: '37', nacionality: 'Brazil', },
+        { id: 19, name: 'Isla', age: '32', nacionality: 'Chile', },
+        { id: 0, name: 'Matheus Henrique', age: '22', nacionality: 'Brazil', },
+        { id: 4, name: 'Thiago Galhardo', age: '31', nacionality: 'Brazil', },
+        { id: 13, name: 'Gustavo Scarpa', age: '26', nacionality: 'Brazil', },
+        { id: 1, name: 'Marinho', age: '30', nacionality: 'Brazil', },
+        { id: 2, name: 'Gabriel', age: '24', nacionality: 'Brazil', },
+        { id: 3, name: 'Cano', age: '32', nacionality: 'Brazil', }
+      ]
+    }
+  ],
+  form: {
+    validation: {
+      errorName: false,
+      errorDescription: false,
+      errorWebSite: false,
+      errorType: false,
+      errorSquad: false
+    },
+    name: '',
+    description: '',
+    website: '',
+    type: '',
+    tags: [],
+    squad: [null,null,null,null,null,null,null,null,null,null,null],
+    formation: '3-4-3',
+  },
+  data: {
+    search: '',
+    playerBase: [
+      { id: 0, name: 'Matheus Henrique', age: '22', nacionality: 'Brazil', },
+      { id: 1, name: 'Marinho', age: '30', nacionality: 'Brazil', },
+      { id: 2, name: 'Gabriel', age: '24', nacionality: 'Brazil', },
+      { id: 3, name: 'Cano', age: '32', nacionality: 'Brazil', },
+      { id: 4, name: 'Thiago Galhardo', age: '31', nacionality: 'Brazil', },
+      { id: 5, name: 'Saravia', age: '27', nacionality: 'Argentina', },
+      { id: 7, name: 'Arrascaeta', age: '26', nacionality: 'Uruguay', },
+      { id: 8, name: 'Rodriguinho', age: '32', nacionality: 'Brazil', },
+      { id: 9, name: 'Daniel Alves', age: '37', nacionality: 'Brazil', },
+      { id: 10, name: 'Igor Gomes', age: '21', nacionality: 'Brazil', },
+      { id: 11, name: 'Hernanes', age: '35', nacionality: 'Brazil', },
+      { id: 12, name: 'Honda', age: '34', nacionality: 'Brazil', },
+      { id: 13, name: 'Gustavo Scarpa', age: '26', nacionality: 'Brazil', },
+      { id: 14, name: 'Guilherme Arana', age: '26', nacionality: 'Brazil', },
+      { id: 15, name: 'Juanfran', age: '35', nacionality: 'Brazil', },
+      { id: 16, name: 'Liziero', age: '22', nacionality: 'Brazil', },
+      { id: 17, name: 'Guga', age: '22', nacionality: 'Brazil', },
+      { id: 18, name: 'Filipe Luis', age: '35', nacionality: 'Brazil', },
+      { id: 19, name: 'Isla', age: '32', nacionality: 'Chile', },
+      { id: 20, name: 'Viña', age: '22', nacionality: 'Uruguay', },
+      { id: 21, name: 'Dodi', age: '24', nacionality: 'Brazil', },
+      { id: 22, name: 'Víctor Cuesta', age: '31', nacionality: 'Argentina', },
+      { id: 23, name: 'Pedro Geromel', age: '34', nacionality: 'Brazil', },
+      { id: 24, name: 'Diego Costa', age: '21', nacionality: 'Brazil', },
+      { id: 25, name: 'Felipe Jonatan', age: '22', nacionality: 'Brazil', },
+      { id: 26, name: 'Vanderlei', age: '36', nacionality: 'Brazil', },
+      { id: 27, name: 'Volpi', age: '29', nacionality: 'Brazil', },
+      { id: 28, name: 'Nenê', age: '39', nacionality: 'Brazil', },
+      { id: 29, name: 'Hyoran', age: '27', nacionality: 'Brazil', },
+      { id: 30, name: 'Ganso', age: '30', nacionality: 'Brazil', },
+      { id: 31, name: 'Jean Pyerre', age: '22', nacionality: 'Brazil', },
+      { id: 32, name: 'Pablo', age: '28', nacionality: 'Brazil', },
+      { id: 33, name: 'Patrick', age: '28', nacionality: 'Brazil', },
+    ],
+    players: [
+      { id: 0, name: 'Matheus Henrique', age: '22', nacionality: 'Brazil', },
+      { id: 1, name: 'Marinho', age: '30', nacionality: 'Brazil', },
+      { id: 2, name: 'Gabriel', age: '24', nacionality: 'Brazil', },
+      { id: 3, name: 'Cano', age: '32', nacionality: 'Brazil', },
+      { id: 4, name: 'Thiago Galhardo', age: '31', nacionality: 'Brazil', },
+      { id: 5, name: 'Saravia', age: '27', nacionality: 'Argentina', },
+      { id: 7, name: 'Arrascaeta', age: '26', nacionality: 'Uruguay', },
+      { id: 8, name: 'Rodriguinho', age: '32', nacionality: 'Brazil', },
+      { id: 9, name: 'Daniel Alves', age: '37', nacionality: 'Brazil', },
+      { id: 10, name: 'Igor Gomes', age: '21', nacionality: 'Brazil', },
+      { id: 11, name: 'Hernanes', age: '35', nacionality: 'Brazil', },
+      { id: 12, name: 'Honda', age: '34', nacionality: 'Brazil', },
+      { id: 13, name: 'Gustavo Scarpa', age: '26', nacionality: 'Brazil', },
+      { id: 14, name: 'Guilherme Arana', age: '26', nacionality: 'Brazil', },
+      { id: 15, name: 'Juanfran', age: '35', nacionality: 'Brazil', },
+      { id: 16, name: 'Liziero', age: '22', nacionality: 'Brazil', },
+      { id: 17, name: 'Guga', age: '22', nacionality: 'Brazil', },
+      { id: 18, name: 'Filipe Luis', age: '35', nacionality: 'Brazil', },
+      { id: 19, name: 'Isla', age: '32', nacionality: 'Chile', },
+      { id: 20, name: 'Viña', age: '22', nacionality: 'Uruguay', },
+      { id: 21, name: 'Dodi', age: '24', nacionality: 'Brazil', },
+      { id: 22, name: 'Víctor Cuesta', age: '31', nacionality: 'Argentina', },
+      { id: 23, name: 'Pedro Geromel', age: '34', nacionality: 'Brazil', },
+      { id: 24, name: 'Diego Costa', age: '21', nacionality: 'Brazil', },
+      { id: 25, name: 'Felipe Jonatan', age: '22', nacionality: 'Brazil', },
+      { id: 26, name: 'Vanderlei', age: '36', nacionality: 'Brazil', },
+      { id: 27, name: 'Volpi', age: '29', nacionality: 'Brazil', },
+      { id: 28, name: 'Nenê', age: '39', nacionality: 'Brazil', },
+      { id: 29, name: 'Hyoran', age: '27', nacionality: 'Brazil', },
+      { id: 30, name: 'Ganso', age: '30', nacionality: 'Brazil', },
+      { id: 31, name: 'Jean Pyerre', age: '22', nacionality: 'Brazil', },
+      { id: 32, name: 'Pablo', age: '28', nacionality: 'Brazil', },
+      { id: 33, name: 'Patrick', age: '28', nacionality: 'Brazil', },
+    ]
+  }
+}
+
+const{ useGlobalState } = createGlobalState(states);
+
+export default useGlobalState

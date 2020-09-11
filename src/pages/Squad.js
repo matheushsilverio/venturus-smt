@@ -1,9 +1,7 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { 
   makeStyles
 } from '@material-ui/core';
-
 import CreateTeam from '../components/squad/createTeam'
 
 
@@ -44,7 +42,6 @@ const useStyles = makeStyles({
 
 export default props => {
   const classes = useStyles();
-  let { id } = useParams()
 
   return (
     <div class="section">

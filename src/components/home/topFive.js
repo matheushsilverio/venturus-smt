@@ -1,8 +1,11 @@
 import React from 'react';
+import TeamModule from '../../modules/requests/Teams'
 
 import { 
   Card, CardHeader, CardContent, makeStyles, Divider, Typography, Button, Icon
 } from '@material-ui/core';
+
+const teamModule = new TeamModule()
 
 const useStyles = makeStyles({
   content: {
@@ -46,6 +49,15 @@ const teams = [
 export default props => {
   const { classes } = props
   const _classes = useStyles()
+
+  // esboco de codigo para requests
+  // const [teamsPlayers, setTeams] = React.useState([])
+  // Promise.all([
+  //   teamModule.getSquads()
+  // ])
+  // .then(res => {
+  //   setTeams(res)
+  // })
 
   return (
     <Card elevation={1} className={classes.cardInfo}>

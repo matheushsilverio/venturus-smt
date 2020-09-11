@@ -10,53 +10,58 @@ import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css' // If using WebPack and style-loader.
 import SquadView from './SquadView'
 
+import store from '../../store/index'
+
 export default props => {
   const { classes } = props
   const _classes = useStyles();
-  const [values, setValues] = React.useState({
-    name: '',
-    description: '',
-    website: '',
-    type: 'fantasy',
-    tags: [],
-    search: '',
-    squad: [null,null,null,null,null,null,null,null,null,null,null],
-    formation: '3-4-3',
-    playerBase: [
-      { id: 0, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cf' },
-      { id: 1, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'mc' },
-      { id: 2, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cb' }
-    ],
-    players: [
-      { id: 0, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cf' },
-      { id: 1, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'mc' },
-      { id: 2, name: 'Matheus', age: '20', nacionality: 'Brasil', position: 'cb' }
-    ]
-  });
+
+  const [values, setValues] = store('data')
+  const [teams, setTeams] = store('teams')
+  const [form, setForm] = store('form')
+
+  // ...esboco para carregar infos de um time para editar
+
+  // const handlerEdit = (el) => {
+  //   setForm({
+  //     ...form,
+  //     ...el
+  //   })
+  // }
+
+  // let { id } = useParams()
+
+  // if (id && (id - 1) >= 0) {
+  //   let aux = teams[id - 1]
+  //   handlerEdit(aux)
+  // }
 
   const _formations = ['3-2-2-3','3-2-3-2','3-4-3','3-5-2','4-2-3-1','4-3-1-2','4-3-3','4-4-2','4-5-1','5-4-1']
 
+  // funcao responsavel para tratar as mudancas das variaveis do form e data
   const handleChange = (prop) => (event) => {
     if (prop === 'tags') {
-      setValues({ ...values, [prop]: event });
+      setForm({ ...form, [prop]: event });
     }
-    if (prop === 'formation') {
-      setValues({ ...values, [prop]: event.target.value });
-      setValues({ ...values, ['squad']: [null,null,null,null,null,null,null,null,null,null,null] });
+    else if (prop === 'search') {
+      setValues({ ...values, [prop]: event.target.value, ['players']: event.target.value != '' ? values.players.filter(e => e.name.includes(event.target.value)) : [...values.playerBase] });
+    }
+    else if (prop === 'formation') {
+      setForm({ ...form, [prop]: event.target.value, ['squad']: [null,null,null,null,null,null,null,null,null,null,null] });
+      // setValues({ ...values, ['squad']: [null,null,null,null,null,null,null,null,null,null,null] })
     }
     else {
-      setValues({ ...values, [prop]: event.target.value });
+      setForm({ ...form, [prop]: event.target.value });
     }
   };
   const handlerValuesChanges = (value, index) => {
-    setValues({ ...values, ['players']: values.playerBase.filter(e => e.id != value.id ) });
-    
-    let aux = [...values.squad]
+    let aux = [...form.squad]
     aux[index] = value
-    setValues({ ...values, ['squad']: aux });
+    setForm({ ...form, ['squad']: aux});
+    setValues({ ...values, ['players']: values.players.filter(e => e.id !== value.id )  })
   }
   const removeTag = (event) => {
-    setValues({ ...values, ['tags']: values.tags.filter(e => e !== event) });
+    setForm({ ...form, ['tags']: form.tags.filter(e => e !== event) });
   }
 
   return (
@@ -73,26 +78,28 @@ export default props => {
         <div class="container">
           <h6 className={_classes.titleGroups}>Team Information</h6>
           <div class="columns is-variable is-8">
+
+            {/* Formulario para cadastro de Time */}
             <div class="column">
               <div>
       
                 <div>
-                  <FormControl fullWidth className={_classes.margin} variant="outlined" size="small">
-                    <label className={_classes.label}>Team name</label>
+                  <FormControl fullWidth error={form.validation.errorName} className={_classes.margin} variant="outlined" size="small">
+                  <label className={_classes.label} style={{ color: form.validation.errorName ? 'red' : 'inherit' }}>Team name *</label>
                     <OutlinedInput
                       id="team-name"
-                      value={values.name}
+                      value={form.name}
                       onChange={handleChange('name')}
                     />
                   </FormControl>
                 </div>
                 <div>
-                  <FormControl fullWidth className={_classes.margin} variant="outlined" size="small">
-                    <label className={_classes.label}>Team description</label>
+                  <FormControl fullWidth error={form.validation.errorDescription} className={_classes.margin} variant="outlined" size="small">
+                  <label className={_classes.label} style={{ color: form.validation.errorDescription ? 'red' : 'inherit' }}>Team description *</label>
                     <OutlinedInput
                       multiline rows={10}
                       id="team-description"
-                      value={values.description}
+                      value={form.description}
                       onChange={handleChange('description')}
                       
                     />
@@ -104,20 +111,20 @@ export default props => {
             <div class="column">
               <div>
                 <div>
-                    <FormControl fullWidth className={_classes.margin} variant="outlined" size="small">
-                      <label className={_classes.label}>Team website</label>
+                    <FormControl fullWidth error={form.validation.errorWebSite} className={_classes.margin} variant="outlined" size="small">
+                    <label className={_classes.label} style={{ color: form.validation.errorWebSite ? 'red' : 'inherit' }}>Team website *</label>
                       <OutlinedInput
                         id="team-name"
-                        value={values.website}
+                        value={form.website}
                         onChange={handleChange('website')}
                         
                       />
                     </FormControl>
                   </div>
                   <div>
-                  <FormControl fullWidth className={_classes.margin} style={{ marginTop: '1.5em' }}>
-                    <label className={_classes.label}>Team type</label>
-                    <RadioGroup aria-label="quiz" name="quiz" onChange={handleChange('type')} value={values.type} className={_classes.formControlLabel}>
+                  <FormControl fullWidth error={form.validation.errorType} className={_classes.margin} style={{ marginTop: '1.5em' }}>
+                    <label className={_classes.label} style={{ color: form.validation.errorType ? 'red' : 'inherit' }}>Team type *</label>
+                    <RadioGroup aria-label="quiz" name="quiz" onChange={handleChange('type')} value={form.type} className={_classes.formControlLabel}>
                       <FormControlLabel value="real" control={<Radio />} label="Real" disabled />
                       <FormControlLabel value="fantasy" control={<Radio />} label="Fantasy" />
                     </RadioGroup>
@@ -129,7 +136,7 @@ export default props => {
                       <TagsInput 
                         className={_classes.tags} 
                         addKeys={[9,13,186]} 
-                        value={values.tags} 
+                        value={form.tags} 
                         onRemove={removeTag}
                         tagProps={{ className: _classes.spanTag, classNameRemove: _classes.spanTagRemove }} 
                         onChange={handleChange('tags')} />
@@ -147,7 +154,7 @@ export default props => {
                   <label className={_classes.label} style={{ marginRight: '10px' }}>Formation</label>
                   <Select
                     id="formation"
-                    value={values.formation}
+                    value={form.formation}
                     onChange={handleChange('formation')}
                   >
                     {
@@ -160,7 +167,8 @@ export default props => {
               </div>
 
               {/* campo */}
-              <SquadView handler={handlerValuesChanges} playerBase={values.players} formation={values.formation} squad={values.squad}></SquadView>
+              <SquadView handler={handlerValuesChanges} playerBase={values.players} formation={form.formation} squad={form.squad}></SquadView>
+
             </div>
             <div class="column">
               <div>
@@ -176,12 +184,10 @@ export default props => {
                 </div>
               </div>
               <div>
+
+                {/* Lista de jogadores para utilizar */}
                 <FormControl fullWidth className={_classes.margin} style={{ borderBottom: '2px solid #EAEAEA' }}>
-                  {
-                    values.players.map(e => (
-                      <RowPLayer classes={_classes} player={e}></RowPLayer>
-                    ))
-                  }
+                  <RowPLayer classes={_classes}></RowPLayer>
                 </FormControl>
                 
               </div>
@@ -194,9 +200,10 @@ export default props => {
 }
 
 function RowPLayer (props) {
-  const { classes, player } = props
+  const { classes } = props
+  const [values, setValues] = store('data')
 
-  return (
+  return values.players.map(player => (
     <div className={classes.boxPlayers}>
       <div>
         <div>
@@ -213,13 +220,9 @@ function RowPLayer (props) {
           <label className={classes.boxPlayersLabel}>Age:</label>
           <span className={classes.boxPlayersSpan}>{ player.age }</span>
         </div>
-        <div>
-          <label className={classes.boxPlayersLabel}>Position:</label>
-          <span className={classes.boxPlayersSpan} style={{ textTransform: 'uppercase' }}>{ player.position }</span>
-        </div>
       </div>
     </div>
-  )
+  )) 
 }
 
 const useStyles = makeStyles((theme) => ({

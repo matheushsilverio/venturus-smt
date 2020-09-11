@@ -24,7 +24,7 @@ export default props => {
         <div className={_classes.playerBoxContent}>
           <label className={_classes.playerLabel}>Most picked player</label>
           <div data-image className={_classes.playerImage}>
-            <img className={_classes.playerImageContent} src="https://s.glbimg.com/es/sde/f/2020/02/27/58765e09575aeed485460352a0980dad_300x300.png" width="150"></img>
+            { _abrevName(player[0].name) }
           </div>
           <div className={_classes.playerInfo}><b>{ player[0].pct * 100 }</b>%</div>
         </div>
@@ -33,7 +33,7 @@ export default props => {
         <div className={_classes.playerBoxContent}>
           <label className={_classes.playerLabel}>Less picked player</label>
           <div data-image className={_classes.playerImage}>
-            <img className={_classes.playerImageContent} src="https://s.glbimg.com/es/sde/f/2019/03/28/55b6bd3285315d25077f61ea5d4a7fc9_300x300.png"></img>
+            { _abrevName(player[1].name) }
           </div>
           <div className={_classes.playerInfo}><b>{ player[1].pct * 100 }</b>%</div>
         </div>

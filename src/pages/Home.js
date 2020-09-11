@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 import React from "react";
 
 import { 
@@ -43,8 +44,12 @@ const useStyles = makeStyles({
   },
 })
 
+import store from '../store/index'
+
 export default props => {
   const classes = useStyles();
+  
+  const [values, setValues] = store('data')
 
   return (
     <div class="section">
