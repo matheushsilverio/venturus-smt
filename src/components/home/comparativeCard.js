@@ -1,8 +1,47 @@
 import React from "react";
+import { _abrevName } from '../../helpers/scripts'
 
 import { 
-  Card, makeStyles
+  Card, makeStyles, Tooltip
 } from '@material-ui/core';
+
+export default props => {
+  const { classes } = props
+  const _classes = useStyles();
+
+  let player = [
+    { name: 'Zinedine Zidane', pct: 0.75 },
+    { name: 'Neymar', pct: 0.25 }
+  ] 
+  
+  return (
+    <Card elevation={1} class="comparative-card">
+      <div class="comparative-line"></div>
+      <div class="comparative-circle"></div>
+      <div class="comparative-circle-mini"></div>
+
+      <div class="comparative-sides">
+        <div className={_classes.playerBoxContent}>
+          <label className={_classes.playerLabel}>Most picked player</label>
+          <div data-image className={_classes.playerImage}>
+            <img className={_classes.playerImageContent} src="https://s.glbimg.com/es/sde/f/2020/02/27/58765e09575aeed485460352a0980dad_300x300.png" width="150"></img>
+          </div>
+          <div className={_classes.playerInfo}><b>{ player[0].pct * 100 }</b>%</div>
+        </div>
+      </div>
+      <div class="comparative-sides">
+        <div className={_classes.playerBoxContent}>
+          <label className={_classes.playerLabel}>Less picked player</label>
+          <div data-image className={_classes.playerImage}>
+            <img className={_classes.playerImageContent} src="https://s.glbimg.com/es/sde/f/2019/03/28/55b6bd3285315d25077f61ea5d4a7fc9_300x300.png"></img>
+          </div>
+          <div className={_classes.playerInfo}><b>{ player[1].pct * 100 }</b>%</div>
+        </div>
+      </div>
+      
+    </Card>
+  )
+}
 
 // Styles
 const useStyles = makeStyles({
@@ -10,41 +49,52 @@ const useStyles = makeStyles({
     borderRadius: '7px',
     background: 'linear-gradient(180deg, rgba(186,61,123,1) 10%, rgba(130,51,129,1) 100%)',
     padding: '2em',
-    height: '250px',
+    height: '600px',
     position: 'relative',
     overflow: 'hidden'
   },
-  side: {
+  playerBoxContent: {
     position: 'relative',
     height: '100%',
-    width: '50%',
-    float: 'left'
+    width: '100%',
   },
-  playerBoxContent: {
-    position: 'relative'
-  },
+  playerImageContent: {
+    height: '150px',
+    width: '150px',
+    borderRadius: '50%',
+    overflow: 'hidden'
+  },  
   playerImage: {
     position: 'absolute',
     height: '150px',
     width: '150px',
     borderRadius: '50%',
     backgroundColor: 'white',
+    textAlign: 'center',
+    fontSize: '3em',
+    fontWeight: 'bolder',
+    color: 'rgba(186,61,123,1)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     top: '50%',
     left: '45%',
-    transform: "translate(-50%, 30%)",
-    border: '5px solid pink',
+    transform: "translate(-50%, -50%)",
+    border: '5px solid #b20692',
+    boxShadow: '0px 0px 29px 3px rgba(113,28,139,1)',
     zIndex: 3,
-    '&:after': {
+    '&:hover:after': {
       content: `''`,
+      transition: 'all .2s',
       position: 'absolute',
-      height: '170px',
-      width: '170px',
+      animation: 'rotate 20s linear infinite',
+      height: '175px',
+      width: '175px',
       borderRadius: '50%',
       backgroundColor: 'transparent',
-      border: '3px dashed white',
-      top: '50%',
-      left: '50%',
-      transform: "translate(-50%, -50%)",
+      backgroundImage: `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%23B289CAFF' stroke-width='5' stroke-dasharray='13' stroke-dashoffset='28' stroke-linecap='butt'/%3e%3c/svg%3e")`,
+      top: '-9%',
+      left: '-8%'
     }
   },
   playerLabel: { 
@@ -55,27 +105,22 @@ const useStyles = makeStyles({
     top: '0%',
     left: '50%',
     transform: "translate(-50%, 0%)",
+  },
+  playerInfo: {
+    position: 'absolute', 
+    fontSize: '1.3em',
+    color: 'white',
+    top: '20%',
+    left: '60%',
+    transform: "translate(55%, 10%)",
+    '&:after': {
+      content: `''`,
+      position: 'absolute',
+      height: '2px',
+      width: '70px',
+      backgroundColor: 'white',
+      top: '100%',
+      left: '0%'
+    }
   }
 })
-
-
-export default props => {
-  const { classes } = props
-  const _classes = useStyles();
-  
-  return (
-    <Card elevation={1} className={_classes.cardComparative}>
-      <div class="comparative-line"></div>
-      <div class="comparative-circle"></div>
-      <div class="comparative-circle-mini"></div>
-
-      <div className={_classes.side}>
-        <div className={_classes.playerBoxContent}>
-          <label className={_classes.playerLabel}>Most picked player</label>
-          <div className={_classes.playerImage}></div>
-        </div>
-      </div>
-      
-    </Card>
-  )
-}

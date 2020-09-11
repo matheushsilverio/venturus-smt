@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState }  from "react";
+import { Link } from "react-router-dom";
 
 import { 
   Card, CardHeader, CardContent, makeStyles, Divider, Typography, Button, Icon
@@ -24,11 +25,13 @@ export default props => {
           </Typography>
         }
         action={
-          <Button
-            classes={{ root: classes.root }}
-            >
-            <Icon style={{ fontSize: 30 }}>add</Icon> 
-          </Button>
+          <Link to="/squad">
+            <Button
+              classes={{ root: classes.root }}
+              >
+              <Icon style={{ fontSize: 30 }}>add</Icon> 
+            </Button>
+          </Link>
         }
       />
       <Divider />

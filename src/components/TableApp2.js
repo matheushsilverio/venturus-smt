@@ -125,6 +125,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 750,
   },
   tableRow: {
+    height: '65px',
     '&:hover': {
       backgroundColor: 'rgba(247,238,247, 1) !important',
       color: '#b13f7d',
@@ -163,11 +164,20 @@ export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
 
+  const [data, setData] = React.useState(rows)
+  // console.log('data', data)
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
+
+  function handlerDelete (index) {
+    console.log('entrou', index)
+    // setData(data.filter((e, i) => i != index))
+  }
 
   return (
     <div className={classes.root}>
@@ -181,8 +191,8 @@ export default function EnhancedTable() {
           />
           <TableBody>
             {
-              stableSort(rows, getComparator(order, orderBy))
-              .map((row) => {
+              stableSort(data, getComparator(order, orderBy))
+              .map((row, i) => {
 
                 return (
                   <TableRow
@@ -200,15 +210,21 @@ export default function EnhancedTable() {
                           {row.description}
                         </Grid>
                         <Grid item>
-                          <IconButton className={classes.margin} size="small">
-                            <Icon style={{ fontSize: 'inherit' }}>delete</Icon>
-                          </IconButton>
-                          <IconButton className={classes.margin} size="small">
-                            <Icon style={{ fontSize: 'inherit' }}>share</Icon>
-                          </IconButton>
-                          <IconButton className={classes.margin} size="small">
-                            <Icon style={{ fontSize: 'inherit' }}>edit</Icon>
-                          </IconButton>
+                          <Tooltip title="Excluir" arrow placement="top">
+                            <IconButton size="small" onclick={handlerDelete(i)}>
+                              <Icon style={{ fontSize: 'inherit' }}>delete</Icon>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Compartilhar" arrow placement="top">
+                            <IconButton size="small">
+                              <Icon style={{ fontSize: 'inherit' }}>share</Icon>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Editar" arrow placement="top">
+                            <IconButton size="small">
+                              <Icon style={{ fontSize: 'inherit' }}>edit</Icon>
+                            </IconButton>
+                          </Tooltip>
                         </Grid>
                       </Grid>
                     </TableCell>
