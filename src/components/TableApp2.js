@@ -1,25 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { Icon, Grid } from '@material-ui/core'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import { Table, TableRow, Snackbar, TableBody, TableCell, TableContainer, TableHead, TableSortLabel, IconButton, Tooltip } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
+
+import store from '../store/index'
+import { Link } from "react-router-dom";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -51,12 +42,6 @@ const columns = [
   { field: 'name', label: 'Name' },
   { field: 'description', label: 'Description' },
 ];
-const rows = [
-  { name: 'Barcelona', description: 'Deste' },
-  { name: 'Real', description: 'Ceste' },
-  { name: 'Leipzig', description: 'Beste' },
-  { name: 'Inter', description: 'Aeste' },
-]
 
 function EnhancedTableHead(props) {
   const { classes, order, orderBy, onRequestSort } = props;
@@ -125,6 +110,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 750,
   },
   tableRow: {
+    height: '65px',
     '&:hover': {
       backgroundColor: 'rgba(247,238,247, 1) !important',
       color: '#b13f7d',
@@ -163,10 +149,25 @@ export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('name');
 
+  const [data, setData] = store('teams')
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+  };
+
+
+  function handlerDelete (index) {
+    setData(data.filter((e, i) => i != index))
+    setOpenSuccess(true);
+  }
+  const [openSuccess, setOpenSuccess] = React.useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSuccess(false);
   };
 
   return (
@@ -181,8 +182,8 @@ export default function EnhancedTable() {
           />
           <TableBody>
             {
-              stableSort(rows, getComparator(order, orderBy))
-              .map((row) => {
+              data.length > 0 ? stableSort(data, getComparator(order, orderBy))
+              .map((row, i) => {
 
                 return (
                   <TableRow
@@ -200,25 +201,45 @@ export default function EnhancedTable() {
                           {row.description}
                         </Grid>
                         <Grid item>
-                          <IconButton className={classes.margin} size="small">
-                            <Icon style={{ fontSize: 'inherit' }}>delete</Icon>
-                          </IconButton>
-                          <IconButton className={classes.margin} size="small">
-                            <Icon style={{ fontSize: 'inherit' }}>share</Icon>
-                          </IconButton>
-                          <IconButton className={classes.margin} size="small">
-                            <Icon style={{ fontSize: 'inherit' }}>edit</Icon>
-                          </IconButton>
+                          <Tooltip title="Excluir" arrow placement="top">
+                            <IconButton size="small" onClick={() => handlerDelete(i)}>
+                              <Icon style={{ fontSize: 'inherit' }}>delete</Icon>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Compartilhar" arrow placement="top">
+                            <IconButton size="small">
+                              <Icon style={{ fontSize: 'inherit' }}>share</Icon>
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Editar" arrow placement="top">
+                            <Link to={`/squad/${i+1}`}>
+                              <IconButton size="small">
+                                <Icon style={{ fontSize: 'inherit' }}>edit</Icon>
+                              </IconButton>
+                            </Link>
+                          </Tooltip>
                         </Grid>
                       </Grid>
                     </TableCell>
                   </TableRow>
                 );
               })
+              : (
+                <TableRow>
+                  <TableCell colSpan={2} style={{ color: 'rgba(0,0,0,0.4)', textAlign: 'center' }}>
+                    Sem registros
+                  </TableCell>
+                </TableRow>
+              )
             }
           </TableBody>
         </Table>
       </TableContainer>
+      <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+         Team deleted with successfully
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

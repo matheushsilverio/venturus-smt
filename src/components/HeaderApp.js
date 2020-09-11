@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { _abrevName } from '../helpers/scripts'
 
 // Components
@@ -41,12 +42,14 @@ export default () => {
               
               {/* Logo and title */}
               <Grid item>
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                  <Avatar alt="Venturus" src={image} style={{ marginRight: '0.7em' }} />
-                  <Typography>
-                    Squad Management Tool
-                  </Typography>
-                </div>
+                <Link to="/">
+                  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Avatar alt="Venturus" src={image} style={{ marginRight: '0.7em' }} />
+                    <Typography>
+                      Squad Management Tool
+                    </Typography>
+                  </div>
+                </Link>
               </Grid>
               
               {/* User */}
